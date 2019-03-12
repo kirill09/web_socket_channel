@@ -51,11 +51,12 @@ class IOWebSocketChannel extends StreamChannelMixin
   factory IOWebSocketChannel.connect(url,
       {Iterable<String> protocols,
       Map<String, dynamic> headers,
-      Duration pingInterval}) {
+      Duration pingInterval, void onThen()}) {
     var channel;
     var sinkCompleter = WebSocketSinkCompleter();
     var stream = StreamCompleter.fromFuture(
         WebSocket.connect(url.toString(), headers: headers).then((webSocket) {
+          onThen();
       webSocket.pingInterval = pingInterval;
       channel._webSocket = webSocket;
       sinkCompleter.setDestinationSink(_IOWebSocketSink(webSocket));
